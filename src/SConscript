@@ -1,0 +1,13 @@
+Import('env')
+
+target_path = "../libc/"
+
+fd_poll_env = env.Clone()
+fd_poll_env.Append(CPPPATH=['net'])
+fd_poll_env.SharedLibrary(target=target_path+"fd_poll.so", source = ['net/fd_poll.c', 'luawrap/lua_fd_poll.c'], SHLIBPREFIX='')
+
+tcp_env = env.Clone()
+fd_poll_env.Append(CPPPATH=['net'])
+fd_poll_env.SharedLibrary(target=target_path+"tcp.so", source = ['net/tcp.c', 'luawrap/lua_tcp.c'], SHLIBPREFIX='')
+
+env.SharedLibrary(target=target_path+"buffer.so", source = ['luawrap/lua_buffer.c'], SHLIBPREFIX='')
