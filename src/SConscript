@@ -11,3 +11,4 @@ fd_poll_env.Append(CPPPATH=['net'])
 fd_poll_env.SharedLibrary(target=target_path+"tcp.so", source = ['net/tcp.c', 'luawrap/lua_tcp.c'], SHLIBPREFIX='')
 
 env.SharedLibrary(target=target_path+"buffer.so", source = ['luawrap/lua_buffer.c'], SHLIBPREFIX='')
+env.SharedLibrary(target=target_path+"signal.so", source = ['luawrap/lua_signal.c'], SHLIBPREFIX='')
