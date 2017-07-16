@@ -66,7 +66,9 @@ int poll_wait(int poll_fd, time_t timeout, struct event *fired, int max) {
 	
 	if(timeout >= 0)
 	{
-		struct timespec timeout_spec = {timeout, 0};
+		struct timespec timeout_spec;
+		timeout_spec.tv_sec = timeout/1000;
+		timeout_spec.tv_nsec = 0;
 		numevents = kevent(poll_fd, NULL, 0, events, max, &timeout_spec);
 	}
 	else{

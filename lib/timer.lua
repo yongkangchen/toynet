@@ -19,7 +19,7 @@ function timer.update(time_diff)
 		
 		local diff = node.key - now 
 		if diff > 0 then
-			return diff
+			return diff * 1000
 		end
 		local func = node.data
 		tree_remove(node)
