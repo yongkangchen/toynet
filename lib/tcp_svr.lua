@@ -6,6 +6,7 @@ local tcp_accept = tcp.accept
 local tcp_close = tcp.close
 local tcp_keepalive = tcp.keepalive
 local tcp_nodelay = tcp.nodelay
+local tcp_connect = tcp.connect
 
 local buffer = require "buffer"
 local buffer_pool = {}
@@ -186,24 +187,30 @@ local function create_server(poll_obj, addr, port)
 		end
 	}
 end
-	
-return function(addr, port, on_accept)
-	local poll_obj = poll()
-	local server = create_server(poll_obj, addr, port)
-	
-	coroutine.wrap(function()
-		while true do
-			local client = server:accept()
-			on_accept(client)
-		end
-	end)()
-	
-	local pre_time = os.time()
-	while true do
-		local cur_time = os.time()
-		local timeout = timer.update(cur_time - pre_time)
-		pre_time  = cur_time
+
+local poll_obj = poll()
+
+return {
+	create_server = function(addr, port, on_accept)
+		local server = create_server(poll_obj, addr, port)
 		
-		poll_obj.wait(timeout)
-	end
-end
+		coroutine.wrap(function()
+			while true do
+				local client = server:accept()
+				on_accept(client)
+			end
+		end)()
+		
+		local pre_time = os.time()
+		while true do
+			local cur_time = os.time()
+			local timeout = timer.update(cur_time - pre_time)
+			pre_time  = cur_time
+			
+			poll_obj.wait(timeout)
+		end
+	end,
+	connect = function(...)
+		return create_client(poll_obj, tcp_connect(...))
+	end,
+}
