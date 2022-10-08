@@ -3,8 +3,11 @@
 
 #if defined(LUA_VERSION_NUM) && LUA_VERSION_NUM == 501
 
-#define luaL_newlib(L, l) \
-  (lua_newtable((L)),luaL_setfuncs((L), (l), 0))
+#if !defined luaL_newlib
+  #define luaL_newlib(L, l) \
+    (lua_newtable((L)),luaL_setfuncs((L), (l), 0))
+#endif
+
 
 #define lua_rawlen lua_objlen
 

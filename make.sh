@@ -1,1 +1,1 @@
-scons luasrc=/usr/local/include/luajit-2.0 $1
+scons luasrc=../luajit/src $1
