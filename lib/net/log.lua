@@ -94,4 +94,11 @@ end
 function log.error( ... )
 	llog(LLOG_ERR, LSAFE_FORMAT(...) .. debug_traceback())
 end
+
+function log.plainerror( ... )
+    llog(LLOG_ERR, LSAFE_FORMAT(...) .. debug_traceback())
+end
+
+function log.disabled() end
+
 return log
