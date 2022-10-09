@@ -29,10 +29,10 @@ build_luajit:
 CCFlags := -Wall -Werror -std=gnu99 -g -fPIC -I luajit/src -I ./src/net -Wl,-undefined -Wl,dynamic_lookup
 
 fd_poll tcp:
-	$(CC) -o libc/$@.so $(CCFlags) -dynamiclib src/luawrap/lua_$@.c -dynamiclib src/net/$@.c
+	$(CC) -o libc/$@.so $(CCFlags) -shared src/luawrap/lua_$@.c -dynamiclib src/net/$@.c
 
 buffer signal:
-	$(CC) -o libc/$@.so $(CCFlags) -dynamiclib src/luawrap/lua_$@.c
+	$(CC) -o libc/$@.so $(CCFlags) -shared src/luawrap/lua_$@.c
 
 clean:
 	rm -rf libc
