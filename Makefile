@@ -13,9 +13,17 @@ dir:
 	mkdir -p libc 
 
 build_luajit:
-	echo "compile luajit"
-	cd luajit && make $(MAKE_FLAG)
-
+	echo "foo"
+	if test -d "./luajit" ; \
+	then echo "luajit Dir exists"; \
+	else \
+		curl -o luajit.tar.gz https://luajit.org/download/LuaJIT-2.1.0-beta3.tar.gz; \
+		tar -xzvf luajit.tar.gz; \
+		mv LuaJIT-2.1.0-beta3 luajit; \
+		rm -f luajit.tar.gz; \
+		echo "compile luajit"; \
+		cd luajit && make $(MAKE_FLAG); \
+	fi
 	
 
 CCFlags := -Wall -Werror -std=gnu99 -g -fPIC -I luajit/src -I ./src/net -Wl,-undefined -Wl,dynamic_lookup
