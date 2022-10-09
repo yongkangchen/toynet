@@ -96,7 +96,7 @@ function log.error( ... )
 end
 
 function log.plainerror( ... )
-    llog(LLOG_ERR, LSAFE_FORMAT(...) .. debug_traceback())
+    llog(LLOG_ERR, LSAFE_FORMAT(...))
 end
 
 function log.disabled() end
