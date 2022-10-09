@@ -22,8 +22,8 @@ build_luajit:
 		mv LuaJIT-2.1.0-beta3 luajit; \
 		rm -f luajit.tar.gz; \
 		echo "compile luajit"; \
-		cd luajit && make $(MAKE_FLAG); \
 	fi
+	cd luajit && make $(MAKE_FLAG);
 	
 
 CCFlags := -Wall -Werror -std=gnu99 -g -fPIC -I luajit/src -I ./src/net -Wl,-undefined -Wl,dynamic_lookup
