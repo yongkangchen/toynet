@@ -2,3 +2,5 @@ build/luawrap
 build/net
 libc
 .sconsign.dblite
+luajit
+.DS_Store

@@ -1,9 +1,8 @@
 package.cpath = package.cpath .. ";./libc/?.so"
-package.path = package.path .. ";./lib/?.lua"
 
-local tcp_connect = require "tcp_svr".connect
-local function get(host, path, is_ssl)
-	local client = tcp_connect(host, is_ssl and 443 or 80)
+local tcp_connect = require "lib.net.tcp_svr".connect
+local function get(host, path, is_ssl, ip)
+	local client = tcp_connect(ip, is_ssl and 443 or 80)
 	if not client then
 		return
 	end
@@ -72,7 +71,7 @@ local function get(host, path, is_ssl)
 	return body
 end
 
-local function request(url)
+local function request(url, ip)
 	local scheme
 	url = string.gsub(url, "^([%w][%w%+%-%.]*)%:", function(s)
 		scheme = s
@@ -89,14 +88,14 @@ local function request(url)
 		url = "/"
 	end
 
-	return get(host, url, scheme == "https")
+	return get(host, url, scheme == "https", ip)
 end
 
-local create_server = require "tcp_svr".create_server
-require "timer".add_timeout(0, function()
+
+require "lib.net.timer".add_timeout(0, function()
 	coroutine.wrap(function()
-		print(request("http://www.baidu.com"))
+		print(request("http://www.baidu.com", "183.232.231.173")) --TODO: host to ip
 	end)()
 end)
 
-create_server("0.0.0.0", 9999, function() end)
+require "lib.net.tcp_svr".loop()

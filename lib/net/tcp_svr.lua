@@ -252,6 +252,7 @@ return {
 	bind = bind,
 	start = function(addr, port, on_accept)
 		bind(addr, port, on_accept)
-		loop()
+		local _, err = pcall(loop)
+		print(err)
 	end
 }

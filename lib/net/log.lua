@@ -28,15 +28,10 @@ local table = table
 
 local tostring = tostring
 local print = print
-local pcall = pcall
 local pairs = pairs
 local type = type
-local io_flush = io.flush
-local debug_traceback = debug.traceback
-local debug_getinfo = debug.getinfo
-local os_time = os.time
+
 local string_format = string.format
-local tostring = tostring
 local os_date = os.date
 
 local function table_dump( object )
@@ -97,6 +92,6 @@ function log.log( ... )
 end
 
 function log.error( ... )
-	llog(LLOG_ERR, LSAFE_FORMAT(...))
+	llog(LLOG_ERR, LSAFE_FORMAT(...) .. debug_traceback())
 end
 return log

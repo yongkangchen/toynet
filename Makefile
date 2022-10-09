@@ -1,14 +1,34 @@
-all: dir luajit fd_poll tcp buffer signal
-dir: 
+ifeq (,$(findstring Windows,$(OS)))
+  HOST_SYS:= $(shell uname -s)
+else
+  HOST_SYS= Windows
+endif
+TARGET_SYS?= $(HOST_SYS)
+ifeq (Darwin,$(TARGET_SYS))
+  MAKE_FLAG=MACOSX_DEPLOYMENT_TARGET=12.6	
+endif
+
+all: dir build_luajit fd_poll tcp buffer signal
+dir:
 	mkdir -p libc 
 
-luajit: 
-	cd luajit && make
+build_luajit:
+	echo "compile luajit"
+	cd luajit && make $(MAKE_FLAG)
 
+	
 
-CCFlags := -Wall -Werror -std=gnu99 -g -Wl,-undefined -Wl,dynamic_lookup -I luajit/src -I ./src/net -llua 
+CCFlags := -Wall -Werror -std=gnu99 -g -fPIC -I luajit/src -I ./src/net -Wl,-undefined -Wl,dynamic_lookup
+
 fd_poll tcp:
-	$(CC) -o libc/$@.so $(CCFlags) src/luawrap/lua_$@.c src/net/$@.c
+	$(CC) -o libc/$@.so $(CCFlags) -dynamiclib src/luawrap/lua_$@.c -dynamiclib src/net/$@.c
 
 buffer signal:
-	$(CC) -o libc/$@.so $(CCFlags) src/luawrap/lua_$@.c
+	$(CC) -o libc/$@.so $(CCFlags) -dynamiclib src/luawrap/lua_$@.c
+
+clean:
+	rm -rf libc
+	cd luajit && make clean
+
+run:
+	./luajit/src/luajit ./example/echo_svr.lua 
