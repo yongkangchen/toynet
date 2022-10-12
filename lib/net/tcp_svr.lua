@@ -213,7 +213,7 @@ end
 
 local function create_server(addr, port)
 	local svr_fd = tcp_listen(addr, port)
-	assert(svr_fd ~= -1, "listen ".. port .. " failed")
+	assert(svr_fd > 0, "listen ".. port .. " failed")
 
 	local event = poll_obj.watch(svr_fd)
 	assert(event, "add to poll failed")
